@@ -8,19 +8,26 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="modern-admin">
 <div class="admin-container">
-    <!-- Side Navigation -->
-    <nav class="admin-sidebar">
+    <nav class="admin-sidebar glass-effect">
         <div class="logo">
-            <h1>FitConnect</h1>
-            <span class="admin-badge">Admin Panel</span>
+            <img src="/img/logo.png" alt="FitConnect Logo" class="logo-img">
+            <div class="logo-text">
+                <h1>FitConnect</h1>
+                <span class="admin-badge glass-effect-light">Admin Panel</span>
+            </div>
         </div>
         
         <ul class="nav-links">
-            <li class="active">
-                <a href="#overview"><i class="fas fa-home"></i> Overview</a>
+            <li class="active glass-effect-light">
+                <a href="#overview">
+                    <i class="fas fa-grid-2"></i>
+                    <span>Overview</span>
+                </a>
             </li>
             <li>
                 <a href="#users"><i class="fas fa-users"></i> User Management</a>
@@ -36,7 +43,7 @@
             </li>
         </ul>
         
-        <div class="admin-profile">
+        <div class="admin-profile glass-effect-light">
             <div class="profile-image">
                 <img src="/img/default-avatar.png" alt="Admin Profile">
             </div>
@@ -47,146 +54,196 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="admin-content">
-        <header class="admin-header">
-            <div class="header-search">
-                <input type="text" placeholder="Search...">
+        <header class="admin-header glass-effect">
+            <div class="header-search glass-effect-light">
                 <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search anything..." class="modern-search">
             </div>
             
             <div class="header-actions">
-                <button class="btn btn-outline">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
-                <a href="/logout" class="btn btn-primary">Logout</a>
+                <div class="notification-bell">
+                    <button class="btn btn-icon glass-effect-light">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge pulse">3</span>
+                    </button>
+                </div>
+                <div class="theme-toggle">
+                    <button class="btn btn-icon glass-effect-light">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <a href="/logout" class="btn btn-primary glass-effect">Logout</a>
             </div>
         </header>
 
-        <!-- Overview Section -->
-        <section id="overview" class="dashboard-section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-info">
-                        <h3>Total Users</h3>
-                        <span class="stat-value" th:text="${userStats.total}">0</span>
-                        <span class="stat-change positive">+5.2% <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <i class="fas fa-dumbbell"></i>
-                    <div class="stat-info">
-                        <h3>Active Workouts</h3>
-                        <span class="stat-value" th:text="${workoutStats.active}">0</span>
-                        <span class="stat-change positive">+12.3% <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <i class="fas fa-check-circle"></i>
-                    <div class="stat-info">
-                        <h3>Completed Plans</h3>
-                        <span class="stat-value" th:text="${workoutStats.completed}">0</span>
-                        <span class="stat-change positive">+8.1% <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <i class="fas fa-user-check"></i>
-                    <div class="stat-info">
-                        <h3>Verified Users</h3>
-                        <span class="stat-value" th:text="${userStats.verified}">0</span>
-                        <span class="stat-change neutral">0% <i class="fas fa-minus"></i></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- User Management Section -->
-        <section id="users" class="dashboard-section">
-            <div class="section-header">
-                <h2>User Management</h2>
-                <button class="btn btn-primary" id="exportUsers">
-                    <i class="fas fa-download"></i> Export Users
-                </button>
-            </div>
-
-            <div class="table-controls">
-                <div class="search-filter">
-                    <input type="text" id="userSearch" placeholder="Search users...">
-                    <select id="roleFilter">
-                        <option value="">All Roles</option>
-                        <option value="USER">Users</option>
-                        <option value="TRAINER">Trainers</option>
-                        <option value="ADMIN">Admins</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Name <i class="fas fa-sort"></i></th>
-                            <th>Email <i class="fas fa-sort"></i></th>
-                            <th>Role <i class="fas fa-sort"></i></th>
-                            <th>Status</th>
-                            <th>Joined Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="user : ${users}">
-                            <td>
-                                <div class="user-info">
-                                    <img src="/img/default-avatar.png" alt="User">
-                                    <span th:text="${user.name}">User Name</span>
-                                </div>
-                            </td>
-                            <td th:text="${user.email}">user@email.com</td>
-                            <td>
-                                <span class="role-badge" th:text="${user.role}">Role</span>
-                            </td>
-                            <td>
-                                <span class="status-badge" th:class="${user.verified ? 'verified' : 'pending'}">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span th:text="${user.verified ? 'Verified' : 'Pending'}">Status</span>
+        <div class="dashboard-wrapper">
+            <section id="overview" class="dashboard-section">
+                <h2 class="section-title">Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card glass-effect">
+                        <div class="stat-icon gradient-purple">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Users</h3>
+                            <div class="stat-data">
+                                <span class="stat-value" th:text="${userStats.total}">0</span>
+                                <span class="stat-change positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    5.2%
                                 </span>
-                            </td>
-                            <td th:text="${#dates.format(user.createdAt, 'dd MMM yyyy')}">Join Date</td>
-                            <td class="actions">
-                                <button class="btn btn-sm btn-edit" th:attr="data-id=${user.id}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <buttonbutton th:if="${!user.role.equals('ADMIN')}" class="btn btn-sm btn-danger delete-user" 
-                                        th:attr="data-id=${user.id}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="pagination">
-                    <button class="btn btn-sm" th:disabled="${currentPage == 1}">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <span>Page <span th:text="${currentPage}">1</span> of <span th:text="${totalPages}">1</span></span>
-                    <button class="btn btn-sm" th:disabled="${currentPage == totalPages}">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <div class="stat-icon gradient-blue">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Active Workouts</h3>
+                            <div class="stat-data">
+                                <span class="stat-value" th:text="${workoutStats.active}">0</span>
+                                <span class="stat-change positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    12.3%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <div class="stat-icon gradient-green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Completed Plans</h3>
+                            <div class="stat-data">
+                                <span class="stat-value" th:text="${workoutStats.completed}">0</span>
+                                <span class="stat-change positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    8.1%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <div class="stat-icon gradient-gray">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Verified Users</h3>
+                            <div class="stat-data">
+                                <span class="stat-value" th:text="${userStats.verified}">0</span>
+                                <span class="stat-change neutral">
+                                    <i class="fas fa-minus"></i>
+                                    0%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section id="users" class="dashboard-section">
+                <div class="section-header">
+                    <div class="section-title-group">
+                        <h2 class="section-title">User Management</h2>
+                        <span class="section-subtitle">Manage all system users</span>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-primary glass-effect" id="addUserBtn">
+                            <i class="fas fa-plus"></i> Add User
+                        </button>
+                        <button class="btn btn-secondary glass-effect" id="exportUsers">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container glass-effect">
+                    <div class="table-controls glass-effect-light">
+                        <div class="search-filter">
+                            <div class="modern-search-wrapper">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="userSearch" placeholder="Search users...">
+                            </div>
+                            <div class="filter-wrapper">
+                                <select id="roleFilter" class="modern-select">
+                                    <option value="">All Roles</option>
+                                    <option value="USER">Users</option>
+                                    <option value="TRAINER">Trainers</option>
+                                    <option value="ADMIN">Admins</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive modern-table">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name <i class="fas fa-sort"></i></th>
+                                    <th>Email <i class="fas fa-sort"></i></th>
+                                    <th>Role <i class="fas fa-sort"></i></th>
+                                    <th>Status</th>
+                                    <th>Joined Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="/img/default-avatar.png" alt="User">
+                                            <span th:text="${user.name}">User Name</span>
+                                        </div>
+                                    </td>
+                                    <td th:text="${user.email}">user@email.com</td>
+                                    <td>
+                                        <span class="role-badge" th:text="${user.role}">Role</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge" th:class="${user.verified ? 'verified' : 'pending'}">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span th:text="${user.verified ? 'Verified' : 'Pending'}">Status</span>
+                                        </span>
+                                    </td>
+                                    <td th:text="${#dates.format(user.createdAt, 'dd MMM yyyy')}">Join Date</td>
+                                    <td class="actions">
+                                        <button class="btn btn-sm btn-edit" th:attr="data-id=${user.id}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button th:if="${!user.role.equals('ADMIN')}" class="btn btn-sm btn-danger delete-user" 
+                                                th:attr="data-id=${user.id}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="pagination glass-effect-light">
+                            <button class="btn btn-sm" th:disabled="${currentPage == 1}">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span>Page <span th:text="${currentPage}">1</span> of <span th:text="${totalPages}">1</span></span>
+                            <button class="btn btn-sm" th:disabled="${currentPage == totalPages}">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 </div>
 
-<!-- Edit User Modal -->
-<div id="editUserModal" class="modal">
-    <div class="modal-content">
+<!-- Modernized Modal -->
+<div id="editUserModal" class="modal fade-in">
+    <div class="modal-content glass-effect">
         <div class="modal-header">
             <h3>Edit User</h3>
             <button class="close-modal"><i class="fas fa-times"></i></button>
