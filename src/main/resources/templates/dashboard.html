@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FitConnect</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+<div class="app-container">
+    <header class="app-header">
+        <div class="logo">
+            <h1>FitConnect</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li class="active"><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/bmi">BMI Calculator</a></li>
+            </ul>
+        </nav>
+        <div class="user-menu">
+            <span th:text="${user.name}">User Name</span>
+            <a href="/logout" class="btn btn-sm">Logout</a>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="welcome-section">
+            <h2>Welcome, <span th:text="${user.name}">User</span>!</h2>
+            <p>Track your fitness journey and manage your workout plans.</p>
+
+            <div th:if="${!user.verified}" class="verification-reminder">
+                <div class="alert alert-warning">
+                    <p>Please verify your email to access all features.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Workouts</h3>
+                <div class="stat-value" th:text="${totalWorkouts}">0</div>
+                <div class="stat-label">Total Plans</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Completed</h3>
+                <div class="stat-value" th:text="${completedWorkouts}">0</div>
+                <div class="stat-label">Finished Plans</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Success Rate</h3>
+                <div class="stat-value"><span th:text="${completionRate}">0</span>%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+
+            <div class="stat-card" th:if="${user.bmi != null}">
+                <h3>Your BMI</h3>
+                <div class="stat-value" th:text="${user.bmi}">0</div>
+                <div class="stat-label">Last Calculated</div>
+            </div>
+        </div>
+
+        <div class="workouts-section">
+            <div class="section-header">
+                <h2>My Workout Plans</h2>
+                <button id="addWorkoutBtn" class="btn btn-primary">Add New Plan</button>
+            </div>
+
+            <div id="workoutsList" class="workouts-list">
+                <div th:if="${workoutPlans.empty}" class="empty-state">
+                    <p>You don't have any workout plans yet. Create one to get started!</p>
+                </div>
+
+                <div th:each="plan : ${workoutPlans}" th:id="'workout-' + ${plan.id}" class="workout-card" th:classappend="${plan.completed ? 'completed' : ''}">
+                    <div class="workout-header">
+                        <h3 th:text="${plan.name}">Workout Name</h3>
+                        <span th:if="${plan.completed}" class="status-tag completed">Completed</span>
+                        <span th:unless="${plan.completed}" class="status-tag pending">Pending</span>
+                    </div>
+
+                    <p class="workout-description" th:text="${plan.description}">Description</p>
+
+                    <div class="workout-schedule">
+                        <strong>Schedule:</strong> <span th:text="${plan.schedule}">Schedule</span>
+                    </div>
+
+                    <div class="workout-actions" th:if="${!plan.completed}">
+                        <button class="btn btn-success complete-workout" th:data-id="${plan.id}">Mark Complete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Add Workout Modal -->
+<div id="addWorkoutModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Workout Plan</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+
+        <form id="addWorkoutForm">
+            <div class="form-group">
+                <label for="workoutName">Workout Name</label>
+                <input type="text" id="workoutName" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="workoutDescription">Description</label>
+                <textarea id="workoutDescription" name="description" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="workoutSchedule">Schedule</label>
+                <input type="text" id="workoutSchedule" name="schedule" required placeholder="e.g., Mon, Wed, Fri">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelWorkoutBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Workout</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

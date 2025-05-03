@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - FitConnect</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="auth-page">
+<div class="auth-container">
+    <div class="logo-container">
+        <h1>FitConnect</h1>
+        <p class="tagline">Your personal fitness companion</p>
+    </div>
+
+    <div class="auth-form-container">
+        <div th:if="${verified}" class="verified-success">
+            <h2>Email Verified!</h2>
+            <div class="alert alert-success">
+                <p th:text="${message}">Your email has been verified successfully!</p>
+            </div>
+            <div class="action-btn">
+                <a href="/login" class="btn btn-primary">Proceed to Login</a>
+            </div>
+        </div>
+
+        <div th:unless="${verified}" class="verified-error">
+            <h2>Verification Failed</h2>
+            <div class="alert alert-danger">
+                <p th:text="${message}">Invalid or expired verification token.</p>
+            </div>
+            <div class="action-btn">
+                <a href="/login" class="btn btn-secondary">Back to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

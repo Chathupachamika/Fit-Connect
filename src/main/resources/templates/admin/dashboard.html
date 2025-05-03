@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FitConnect</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+<div class="app-container">
+    <header class="app-header">
+        <div class="logo">
+            <h1>FitConnect Admin</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li class="active"><a href="/admin/dashboard">Admin Dashboard</a></li>
+                <li><a href="/dashboard">User Dashboard</a></li>
+            </ul>
+        </nav>
+        <div class="user-menu">
+            <span th:text="${admin.name}">Admin Name</span>
+            <a href="/logout" class="btn btn-sm">Logout</a>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="welcome-section">
+            <h2>Admin Dashboard</h2>
+            <p>Manage users and system settings</p>
+        </div>
+
+        <div class="section-header">
+            <h2>User Management</h2>
+        </div>
+
+        <div class="users-list">
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Verified</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}">User Name</td>
+                    <td th:text="${user.email}">user@email.com</td>
+                    <td th:text="${user.role}">Role</td>
+                    <td th:text="${user.verified ? 'Yes' : 'No'}">Verified</td>
+                    <td>
+                        <button th:if="${!user.isAdmin()}"
+                                th:data-id="${user.id}"
+                                class="btn btn-sm btn-danger delete-user">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+/* Dashboard Specific Styles */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-content,
+.bmi-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.welcome-section {
+    margin-bottom: 2rem;
+}
+
+.welcome-section h2 {
+    font-size: 1.75rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.verification-reminder {
+    margin-top: 1rem;
+}
+
+/* Stats Cards */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 0.75rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #777;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Workouts List */
+.workouts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.workout-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.workout-card:hover {
+    transform: translateY(-5px);
+}
+
+.workout-card.completed {
+    border-left: 4px solid #28a745;
+}
+
+.workout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.workout-header h3 {
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.status-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.status-tag.completed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-tag.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.workout-description {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.workout-schedule {
+    color: #666;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.workout-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 8px;
+    color: #666;
+}
+
+/* BMI Calculator Page */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h2 {
+    font-size: 1.75rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+    .calculator-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.calculator-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.result-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.result-header {
+    margin-bottom: 1.5rem;
+}
+
+.bmi-score {
+    margin-bottom: 1.5rem;
+}
+
+.score-value {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.score-label {
+    font-size: 1rem;
+    color: #666;
+}
+
+.bmi-category {
+    margin-bottom: 2rem;
+}
+
+.bmi-category p {
+    font-size: 1.1rem;
+}
+
+.bmi-scale {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.scale-bar {
+    display: flex;
+    height: 40px;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.zone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    position: relative;
+}
+
+.zone span {
+    position: absolute;
+    top: -25px;
+    font-size: 0.75rem;
+    color: #333;
+}
+
+.zone .range {
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.zone.underweight {
+    background-color: #17a2b8;
+    width: 15%;
+}
+
+.zone.normal {
+    background-color: #28a745;
+    width: 35%;
+}
+
+.zone.overweight {
+    background-color: #ffc107;
+    width: 25%;
+}
+
+.zone.obese {
+    background-color: #dc3545;
+    width: 25%;
+}
+
+.bmi-indicator {
+    position: absolute;
+    top: 0;
+    height: 40px;
+    width: 2px;
+    background-color: #000;
+    border-radius: 4px;
+    transition: left 0.5s ease;
+}
+
+.recommendation {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.recommendation h4 {
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+.bmi-info {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bmi-info h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.bmi-info p {
+    margin-bottom: 1rem;
+    color: #555;
+}
