@@ -6,9 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Filter to secure protected endpoints requiring authentication
- */
 public class AuthFilter implements Filter {
 
     @Override
@@ -20,22 +17,33 @@ public class AuthFilter implements Filter {
 
         HttpSession session = httpRequest.getSession(false);
         boolean isLoggedIn = session != null && session.getAttribute("userId") != null;
-
+        String userRole = session != null ? (String) session.getAttribute("userRole") : null;
+        String requestURI = httpRequest.getRequestURI();
+        
         // Handle AJAX requests differently to avoid CORS issues
         boolean isAjax = "XMLHttpRequest".equals(httpRequest.getHeader("X-Requested-With"));
 
         if (isLoggedIn) {
-            // User is authenticated, proceed with the request
+            // Check admin access
+            if (requestURI.startsWith("/admin/") && !"ADMIN".equals(userRole)) {
+                if (isAjax) {
+                    httpResponse.setContentType("application/json");
+                    httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    httpResponse.getWriter().write("{\"error\":\"Access denied\",\"redirect\":\"/dashboard\"}");
+                } else {
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/dashboard");
+                }
+                return;
+            }
+            // User is authenticated and authorized, proceed with the request
             chain.doFilter(request, response);
         } else {
             // User is not authenticated
             if (isAjax) {
-                // For AJAX requests, return 401 Unauthorized status with JSON
                 httpResponse.setContentType("application/json");
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 httpResponse.getWriter().write("{\"error\":\"Not authenticated\",\"redirect\":\"/login\"}");
             } else {
-                // For regular requests, redirect to login page
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
             }
         }

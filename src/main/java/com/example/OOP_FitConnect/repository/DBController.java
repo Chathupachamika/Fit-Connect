@@ -16,7 +16,7 @@ public class DBController {
     private final Map<String, User> usersByVerificationToken = new ConcurrentHashMap<>();
     private final Map<String, User> usersByResetToken = new ConcurrentHashMap<>();
 
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         usersById.put(user.getId(), user);
         usersByEmail.put(user.getEmail(), user);
 
@@ -27,9 +27,10 @@ public class DBController {
         if (user.getResetToken() != null) {
             usersByResetToken.put(user.getResetToken(), user);
         }
+        return user;
     }
 
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         User existingUser = usersById.get(user.getId());
 
         if (existingUser != null) {
@@ -52,6 +53,7 @@ public class DBController {
         if (user.getResetToken() != null) {
             usersByResetToken.put(user.getResetToken(), user);
         }
+        return existingUser;
     }
 
     public User getUserById(String id) {

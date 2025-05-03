@@ -1,4 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize components
+    initializeModals();
+    initializeSearch();
+    initializeFilters();
+    setupEventListeners();
+    
+    // Handle user search
+    const userSearch = document.getElementById('userSearch');
+    if (userSearch) {
+        userSearch.addEventListener('input', debounce(function(e) {
+            filterUsers(e.target.value);
+        }, 300));
+    }
+
+    // Handle role filter
+    const roleFilter = document.getElementById('roleFilter');
+    if (roleFilter) {
+        roleFilter.addEventListener('change', function(e) {
+            fetch(`/admin/api/users/${e.target.value}`)
+                .then(response => response.json())
+                .then(users => updateUsersTable(users))
+                .catch(error => showNotification('Error loading users', 'error'));
+        });
+    }
+
+    // Export users functionality
+    const exportBtn = document.getElementById('exportUsers');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportUsers);
+    }
+
+    // Edit user form handler
+    const editUserForm = document.getElementById('editUserForm');
+    if (editUserForm) {
+        editUserForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = this.getAttribute('data-user-id');
+            updateUser(userId, new FormData(this));
+        });
+    }
+
     // Modal elements
     const createAdminModal = document.getElementById('createAdminModal');
     const addAdminBtn = document.getElementById('addAdminBtn');
@@ -126,6 +167,95 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('An error occurred. Please try again.', 'error');
             }
         });
+    }
+
+    function updateUser(userId, formData) {
+        fetch(`/admin/api/update-user/${userId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams(formData)
+        })
+        .then(handleResponse)
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                closeModal('editUserModal');
+                reloadUsersList();
+            }
+        })
+        .catch(handleError);
+    }
+
+    function exportUsers() {
+        const users = Array.from(document.querySelectorAll('.user-row'))
+            .map(row => ({
+                name: row.querySelector('.user-name').textContent,
+                email: row.querySelector('.user-email').textContent,
+                role: row.querySelector('.user-role').textContent,
+                status: row.querySelector('.user-status').textContent
+            }));
+
+        const csv = convertToCSV(users);
+        downloadCSV(csv, 'users-export.csv');
+    }
+
+    function filterUsers(searchTerm) {
+        const rows = document.querySelectorAll('.user-row');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+        });
+    }
+
+    function handleResponse(response) {
+        if (response.ok) return response.json();
+        if (response.status === 401) {
+            window.location.href = '/login';
+            throw new Error('Not authenticated');
+        }
+        throw new Error('Request failed');
+    }
+
+    function handleError(error) {
+        console.error('Error:', error);
+        if (error.message !== 'Not authenticated') {
+            showNotification('An error occurred. Please try again.', 'error');
+        }
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function convertToCSV(arr) {
+        const array = [Object.keys(arr[0])].concat(arr);
+        return array.map(row => {
+            return Object.values(row)
+                .map(String)
+                .map(v => v.replaceAll('"', '""'))
+                .map(v => `"${v}"`)
+                .join(',');
+        }).join('\n');
+    }
+
+    function downloadCSV(csv, filename) {
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
     
     // Helper function to show notification

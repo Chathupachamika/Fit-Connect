@@ -61,12 +61,14 @@ public class AuthController {
             HttpSession session = request.getSession(true);
             session.setAttribute("userId", user.getId());
             session.setAttribute("userEmail", user.getEmail());
+            session.setAttribute("userRole", user.getRole());  // Add role to session
 
             response.put("success", true);
-            response.put("redirect", "/dashboard");
+            // Redirect based on role
+            response.put("redirect", user.isAdmin() ? "/admin/dashboard" : "/dashboard");
 
-            // Add verification check
-            if (!user.isVerified()) {
+            // Add verification check for non-admin users
+            if (!user.isAdmin() && !user.isVerified()) {
                 response.put("warning", "Please verify your email to access all features");
             }
 

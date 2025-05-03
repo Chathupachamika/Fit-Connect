@@ -1,6 +1,7 @@
 package com.example.OOP_FitConnect.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +17,15 @@ public class User {
     private Double bmi;
     private List<WorkoutPlan> workoutPlans;
     private String role; // Added role field
+    private String profileImage; // Added profileImage field
+    private Date createdAt; // Added createdAt field
 
     public User() {
         this.id = UUID.randomUUID().toString();
         this.verified = false;
         this.workoutPlans = new ArrayList<>();
         this.role = "USER"; // Default role
+        this.createdAt = new Date(); // Initialize createdAt
     }
 
     // Existing getters and setters...
@@ -120,5 +124,21 @@ public class User {
 
     public void addWorkoutPlan(WorkoutPlan workoutPlan) {
         this.workoutPlans.add(workoutPlan);
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

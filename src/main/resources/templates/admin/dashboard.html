@@ -6,66 +6,217 @@
     <title>Admin Dashboard - FitConnect</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<div class="app-container">
-    <header class="app-header">
+<div class="admin-container">
+    <!-- Side Navigation -->
+    <nav class="admin-sidebar">
         <div class="logo">
-            <h1>FitConnect Admin</h1>
+            <h1>FitConnect</h1>
+            <span class="admin-badge">Admin Panel</span>
         </div>
-        <nav class="main-nav">
-            <ul>
-                <li class="active"><a href="/admin/dashboard">Admin Dashboard</a></li>
-                <li><a href="/dashboard">User Dashboard</a></li>
-            </ul>
-        </nav>
-        <div class="user-menu">
-            <span th:text="${admin.name}">Admin Name</span>
-            <a href="/logout" class="btn btn-sm">Logout</a>
+        
+        <ul class="nav-links">
+            <li class="active">
+                <a href="#overview"><i class="fas fa-home"></i> Overview</a>
+            </li>
+            <li>
+                <a href="#users"><i class="fas fa-users"></i> User Management</a>
+            </li>
+            <li>
+                <a href="#workouts"><i class="fas fa-dumbbell"></i> Workout Plans</a>
+            </li>
+            <li>
+                <a href="#analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+            </li>
+            <li>
+                <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+            </li>
+        </ul>
+        
+        <div class="admin-profile">
+            <div class="profile-image">
+                <img src="/img/default-avatar.png" alt="Admin Profile">
+            </div>
+            <div class="admin-info">
+                <span th:text="${admin != null ? admin.name : 'Admin'}">Admin Name</span>
+                <small>System Administrator</small>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="dashboard-content">
-        <div class="welcome-section">
-            <h2>Admin Dashboard</h2>
-            <p>Manage users and system settings</p>
-        </div>
+    <!-- Main Content -->
+    <main class="admin-content">
+        <header class="admin-header">
+            <div class="header-search">
+                <input type="text" placeholder="Search...">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="header-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <a href="/logout" class="btn btn-primary">Logout</a>
+            </div>
+        </header>
 
-        <div class="section-header">
-            <h2>User Management</h2>
-        </div>
+        <!-- Overview Section -->
+        <section id="overview" class="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h3>Total Users</h3>
+                        <span class="stat-value" th:text="${userStats.total}">0</span>
+                        <span class="stat-change positive">+5.2% <i class="fas fa-arrow-up"></i></span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <div class="stat-info">
+                        <h3>Active Workouts</h3>
+                        <span class="stat-value" th:text="${workoutStats.active}">0</span>
+                        <span class="stat-change positive">+12.3% <i class="fas fa-arrow-up"></i></span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-info">
+                        <h3>Completed Plans</h3>
+                        <span class="stat-value" th:text="${workoutStats.completed}">0</span>
+                        <span class="stat-change positive">+8.1% <i class="fas fa-arrow-up"></i></span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-user-check"></i>
+                    <div class="stat-info">
+                        <h3>Verified Users</h3>
+                        <span class="stat-value" th:text="${userStats.verified}">0</span>
+                        <span class="stat-change neutral">0% <i class="fas fa-minus"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div class="users-list">
-            <table class="admin-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Verified</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.name}">User Name</td>
-                    <td th:text="${user.email}">user@email.com</td>
-                    <td th:text="${user.role}">Role</td>
-                    <td th:text="${user.verified ? 'Yes' : 'No'}">Verified</td>
-                    <td>
-                        <button th:if="${!user.isAdmin()}"
-                                th:data-id="${user.id}"
-                                class="btn btn-sm btn-danger delete-user">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <!-- User Management Section -->
+        <section id="users" class="dashboard-section">
+            <div class="section-header">
+                <h2>User Management</h2>
+                <button class="btn btn-primary" id="exportUsers">
+                    <i class="fas fa-download"></i> Export Users
+                </button>
+            </div>
+
+            <div class="table-controls">
+                <div class="search-filter">
+                    <input type="text" id="userSearch" placeholder="Search users...">
+                    <select id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="USER">Users</option>
+                        <option value="TRAINER">Trainers</option>
+                        <option value="ADMIN">Admins</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name <i class="fas fa-sort"></i></th>
+                            <th>Email <i class="fas fa-sort"></i></th>
+                            <th>Role <i class="fas fa-sort"></i></th>
+                            <th>Status</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td>
+                                <div class="user-info">
+                                    <img src="/img/default-avatar.png" alt="User">
+                                    <span th:text="${user.name}">User Name</span>
+                                </div>
+                            </td>
+                            <td th:text="${user.email}">user@email.com</td>
+                            <td>
+                                <span class="role-badge" th:text="${user.role}">Role</span>
+                            </td>
+                            <td>
+                                <span class="status-badge" th:class="${user.verified ? 'verified' : 'pending'}">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span th:text="${user.verified ? 'Verified' : 'Pending'}">Status</span>
+                                </span>
+                            </td>
+                            <td th:text="${#dates.format(user.createdAt, 'dd MMM yyyy')}">Join Date</td>
+                            <td class="actions">
+                                <button class="btn btn-sm btn-edit" th:attr="data-id=${user.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <buttonbutton th:if="${!user.role.equals('ADMIN')}" class="btn btn-sm btn-danger delete-user" 
+                                        th:attr="data-id=${user.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button class="btn btn-sm" th:disabled="${currentPage == 1}">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span>Page <span th:text="${currentPage}">1</span> of <span th:text="${totalPages}">1</span></span>
+                    <button class="btn btn-sm" th:disabled="${currentPage == totalPages}">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
     </main>
 </div>
 
+<!-- Edit User Modal -->
+<div id="editUserModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit User</h3>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="editUserForm">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role">
+                    <option value="USER">User</option>
+                    <option value="TRAINER">Trainer</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/admin.js"></script>
 </body>
 </html>
