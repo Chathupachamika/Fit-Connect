@@ -16,7 +16,7 @@ public class User {
     private long resetTokenExpiry;
     private Double bmi;
     private List<WorkoutPlan> workoutPlans;
-    private String role; // Added role field
+    private String role; 
     private String profileImage; // Added profileImage field
     private Date createdAt; // Added createdAt field
 
