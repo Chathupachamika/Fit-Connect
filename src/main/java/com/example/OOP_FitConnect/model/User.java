@@ -17,7 +17,7 @@ public class User {
     private Double bmi;
     private List<WorkoutPlan> workoutPlans;
     private String role; 
-    private String profileImage; // Added profileImage field
+    private String profileImage;
     private Date createdAt; 
 
     public User() {
