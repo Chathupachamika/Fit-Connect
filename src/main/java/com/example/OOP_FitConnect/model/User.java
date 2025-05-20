@@ -18,7 +18,7 @@ public class User {
     private List<WorkoutPlan> workoutPlans;
     private String role; 
     private String profileImage; // Added profileImage field
-    private Date createdAt; // Added createdAt field
+    private Date createdAt; 
 
     public User() {
         this.id = UUID.randomUUID().toString();
